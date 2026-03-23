@@ -2,9 +2,19 @@ import AcmeLogo from '@/app/ui/acme-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
+import { type SanityDocument } from "next-sanity";
 import Image from 'next/image';
+import { client } from "@/app/lib/sanity";
 
-export default function Page() {
+const POSTS_QUERY = `*[
+  _type == "post"
+  && defined(slug.current)
+]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
+const options = { next: { revalidate: 30 } };
+
+export default async function Page() {
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
+
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
