@@ -107,7 +107,7 @@ export async function fetchFilteredInvoices(
         string(amount) match "*" + ${JSON.stringify(query)} + "*" ||
         string(date) match "*" + ${JSON.stringify(query)} + "*" ||
         status match "*" + ${JSON.stringify(query)} + "*"
-      )] | order(date desc)[${offset}..${limit}] {
+      )]       | order(date desc)[${offset}..${limit - 1}] {
         "id": _id,
         amount,
         date,
